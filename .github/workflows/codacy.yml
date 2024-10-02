@@ -43,8 +43,12 @@ jobs:
     
     - name: Show outdated dependencies
       run: cat outdated_dependencies.txt
-  
 
+    - name: Security audit with pip-audit
+      run: |
+        pip install pip-audit
+        pip-audit
+  
     - name: Upload coverage to Codacy
       run: |
         pip install codacy-coverage
