@@ -57,4 +57,28 @@ jobs:
           MARIADB_USER: uvlhub_user
           MARIADB_PASSWORD: uvlhub_password
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+  comp-3.10:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10, 3.11, 3.12]
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pylint
+
+      - name: Run pylint
+        run: |
+          pylint app modules tests --ignore=app/static,app/templates,app/migrations,app/instance,app/config.py,app/__init__.py,app/main.py,app/blueprints.py,app/utils.py,app/extensions.py --output-format=json > pylint_report.json
+        continue-on-error: true
