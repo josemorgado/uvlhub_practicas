@@ -30,6 +30,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      
+      - name: Check dependencies
+        run: |
+          pip install pip-review
+          pip-review --local
+
 
       - name: Install dependencies
         run: |
