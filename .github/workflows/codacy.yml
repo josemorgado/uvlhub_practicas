@@ -9,7 +9,7 @@ on:
         - main
 
 jobs:
-  build:
+  ejercicio1:
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -57,7 +57,7 @@ jobs:
           MARIADB_USER: uvlhub_user
           MARIADB_PASSWORD: uvlhub_password
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-  compilation-test:
+  ejercicio2:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -65,7 +65,7 @@ jobs:
     continue-on-error: ${{ matrix.python-version == '3.1' }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -82,3 +82,25 @@ jobs:
         run: |
           pylint app modules tests --ignore=app/static,app/templates,app/migrations,app/instance,app/config.py,app/__init__.py,app/main.py,app/blueprints.py,app/utils.py,app/extensions.py --output-format=json > pylint_report.json
         continue-on-error: true
+  ejercicio3:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Clonar el codigo
+        uses: actions/checkout@v4
+      
+      - name: Configurar python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Instalar pip audit
+        run: pip install pip-audit
+
+      - name: Ejecutar pip audit
+        run: pip-audit -r requirements.txt
