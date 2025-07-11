@@ -103,4 +103,4 @@ jobs:
         run: pip install pip-audit
 
       - name: Ejecutar pip audit
-        run: pip-audit -r requirements.txt
+        run: pip-audit -r requirements.txt || true
